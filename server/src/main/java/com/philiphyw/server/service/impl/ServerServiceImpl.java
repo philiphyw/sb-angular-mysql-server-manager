@@ -4,8 +4,10 @@ import com.philiphyw.server.enumeration.Status;
 import com.philiphyw.server.model.Server;
 import com.philiphyw.server.repository.ServerRepository;
 import com.philiphyw.server.service.ServerService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 
@@ -14,6 +16,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;
+
+import static java.lang.Boolean.TRUE;
 
 @RequiredArgsConstructor
 @Service
@@ -42,22 +46,27 @@ public class ServerServiceImpl implements ServerService {
 
     @Override
     public Server get(Long id) {
-        return null;
+        log.info("get server by id {}", id);
+        return serverRepository.findById(id).get();
     }
 
     @Override
     public Server update(Server server) {
-        return null;
+        log.info("Updating the server: {}", server.getName());
+        return serverRepository.save(server);
     }
 
     @Override
     public Boolean delete(Long id) {
-        return null;
+        log.info("Deleting the server with Id: {}", id);
+        serverRepository.deleteById(id);
+        return TRUE;
     }
 
     @Override
     public Collection<Server> list(int limit) {
-        return null;
+        log.info("Fetching all servers");
+        return serverRepository.findAll(PageRequest.of(0,limit)).toList();
     }
 
     private String setServerImageUrl(Server server) {
